@@ -2,10 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 abstract class AuthBase {
   User get currentUser;
-
   Future<User> signInAnonymously();
-
   Future<void> logOut();
+  Stream<User> authStateChanged();
 }
 
 class Auth implements AuthBase {
@@ -24,4 +23,7 @@ class Auth implements AuthBase {
   Future<void> logOut() async {
     await _firebaseAuth.signOut();
   }
+
+  @override
+  Stream<User> authStateChanged() => _firebaseAuth.authStateChanges();
 }

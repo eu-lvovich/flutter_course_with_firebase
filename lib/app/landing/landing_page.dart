@@ -5,45 +5,29 @@ import 'package:flutter_edu_app_with_firebase/app/home/Home.dart';
 import 'package:flutter_edu_app_with_firebase/services/Auth.dart';
 import '../sign_in/sign_in_page.dart';
 
-class LandingPage extends StatefulWidget {
-  final AuthBase auth;
-
+class LandingPage extends StatelessWidget {
   const LandingPage({Key key, @required this.auth}) : super(key: key);
-
-  @override
-  _LandingPageState createState() => _LandingPageState();
-}
-
-class _LandingPageState extends State<LandingPage> {
-  User _user;
-
-  void _updateUser(User user) {
-    setState(() {
-      _user = user;
-    });
-  }
-
-  void _signOut() {
-    setState(() {
-      _user = null;
-    });
-  }
-
-  @override
-  void initState() {
-    _updateUser(widget.auth.currentUser);
-  }
+  final AuthBase auth;
 
   @override
   Widget build(BuildContext context) {
-    if (_user == null) {
-      return SignInPage(
-        auth: widget.auth,
-        onSignIn: _updateUser,
-      );
-    }
-    return HomePage(
-        auth: widget.auth,
-        onSignOut: _signOut);
+    return StreamBuilder<User>(
+      stream: auth.authStateChanged(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.active) {
+          final user = snapshot.data;
+
+          if (user == null) {
+            return SignInPage(auth: auth);
+          }
+          return HomePage(auth: auth);
+        }
+        return Scaffold(
+          body: Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
+      },
+    );
   }
 }
