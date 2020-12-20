@@ -24,8 +24,6 @@ class HomePage extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: _signOut,
-            hoverColor: Colors.red,
-            splashColor: Colors.red,
             splashRadius: 20.0,
             icon: Icon(Icons.logout),
           )

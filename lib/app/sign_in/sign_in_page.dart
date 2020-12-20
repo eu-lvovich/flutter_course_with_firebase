@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -5,8 +7,7 @@ import 'package:flutter_edu_app_with_firebase/services/Auth.dart';
 import 'sign_in_button/sign_in_button.dart';
 
 class SignInPage extends StatelessWidget {
-  const SignInPage({Key key, @required this.auth})
-      : super(key: key);
+  const SignInPage({Key key, @required this.auth}) : super(key: key);
 
   final AuthBase auth;
 
@@ -18,13 +19,17 @@ class SignInPage extends StatelessWidget {
     }
   }
 
+  Future<void> _signInWithGoogle() async {
+    try {
+      await auth.signInWithGoogle();
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Time Tracker'),
-        elevation: 2,
-      ),
       body: _buildContainer(),
       backgroundColor: Colors.grey[100],
     );
@@ -50,7 +55,7 @@ class SignInPage extends StatelessWidget {
             text: "Google",
             color: Colors.white,
             textColor: Colors.black87,
-            onPressed: () {},
+            onPressed: _signInWithGoogle,
           ),
           SizedBox(
             height: 8,
@@ -67,7 +72,7 @@ class SignInPage extends StatelessWidget {
           ),
           SignInButton(
             text: "e-mail",
-            color: Colors.teal,
+            color: Colors.amber,
             textColor: Colors.white,
             onPressed: () {},
           ),
